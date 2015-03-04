@@ -1,0 +1,12 @@
+@prefix food: <http://www.w3.org/TR/2003/PR-owl-guide-20031209/food#> .
+@prefix wine: <http://www.w3.org/TR/2003/PR-owl-guide-20031209/wine#> .
+@prefix meal: <http://www.delta.com.tw/meal#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+[GoodMealRule: (?T meal:eatFood ?F) 
+               (?F rdf:type food:NonRedMeat)
+               (?T meal:drinkWine ?W)
+               (?W rdf:type wine:DessertWine)
+               ->
+               (?T rdfs:subClassOf meal:GoodMeal)
+]
