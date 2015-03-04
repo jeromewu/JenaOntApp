@@ -1,0 +1,11 @@
+@prefix demo: <http://jena.hpl.hp.com/demo#>.
+
+[transitiveRule: (?A demo:p ?B), (?B demoe:p ?C) 
+                  -> 
+                  (?A > demoe:p ?C)
+]
+
+[symmetricRule: (?Y demo:p ?X) 
+                -> 
+                (?X demo:p ?Y)
+]
