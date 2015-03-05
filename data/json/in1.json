@@ -1,6 +1,7 @@
 {
   "args": [
     {"property":"drinkWine", "propertyNS":"meal", "value":"SelaksIceWine", "valueNS":"wine"},
-    {"property":"eatFood", "propertyNS":"meal", "value":"Pork", "valueNS":"food"}
+    {"property":"eatFood", "propertyNS":"meal", "value":"Pork", "valueNS":"food"},
+    {"property":"winePrice", "propertyNS":"meal", "value":"1000", "valueNS":"xsd:int"}
   ]
 }

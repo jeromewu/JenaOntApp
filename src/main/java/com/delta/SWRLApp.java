@@ -9,10 +9,22 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import java.lang.Float;
+import java.lang.Double;
+import java.lang.Integer;
+import java.lang.Long;
+import java.lang.Short;
+import java.lang.Byte;
+import java.math.BigInteger;
+import java.math.BigDecimal;
+import java.lang.Boolean;
+import java.lang.String;
+
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -53,7 +65,27 @@ public class SWRLApp
       
       Property subClassOf = infModel.getProperty(prefixMap.get("rdfs"), "subClassOf");
       target = infModel.getResource(getURI(targetNameSpace, targetLocalName));
-      System.out.println(target.getProperty(subClassOf).getObject());
+      
+      //Output Result
+      StmtIterator iter = infModel.listStatements();
+      while(iter.hasNext()) {
+        Statement statement = iter.nextStatement();
+        Resource subject = statement.getSubject();
+        Property property = statement.getPredicate();
+        if(subject == null || 
+           property == null || 
+           subject.getURI() == null || 
+           property.getNameSpace() == null || 
+           property.getLocalName() == null ) {
+          continue;
+        } else {
+          if(subject.getURI().equals(getURI(targetNameSpace, targetLocalName)) && 
+             property.getNameSpace().equals(prefixMap.get("rdfs")) && 
+             property.getLocalName().equals("subClassOf")) {
+            System.out.println(PrintUtil.print(statement.getObject()));
+          }
+        }
+      }
     }
 
     private static Model getModel(String filePath) {
@@ -83,22 +115,22 @@ public class SWRLApp
       JSONArray args = (JSONArray)jsonObject.get("args");
       Iterator<JSONObject> iterator = args.iterator();
       while(iterator.hasNext()) {
-        JSONObject obj = iterator.next();
+        JSONObject jsonObj = iterator.next();
 
-        String propertyNS = (String)obj.get("propertyNS");
-        String property = (String)obj.get("property");
-        String valueNS = (String)obj.get("valueNS");
-        String value = (String)obj.get("value");
+        String propertyNS = (String)jsonObj.get("propertyNS");
+        String property = (String)jsonObj.get("property");
+        String valueNS = (String)jsonObj.get("valueNS");
+        String value = (String)jsonObj.get("value");
 
-        Property p = model.getProperty(prefixMap.get(propertyNS), property);
-        if(valueNS != "xsd") {
-          Resource r = model.getResource(getURI(prefixMap.get(valueNS), value));
-          target.addProperty(p, r);
+        Property ontProperty = model.getProperty(prefixMap.get(propertyNS), property);
+        if(!valueNS.contains("xsd")) {
+          Resource resource = model.getResource(getURI(prefixMap.get(valueNS), value));
+          target.addProperty(ontProperty, resource);
         } else {
-          ; 
+          Literal literal = getLiteral(model, valueNS, value);
+          target.addProperty(ontProperty, literal);
         }
       }
-
       return target;
     }
 
@@ -137,5 +169,33 @@ public class SWRLApp
       Matcher matcher = pattern.matcher(input);
       matcher.find();
       return matcher.group(1);
+    }
+
+    private static Literal getLiteral(Model model, String valueNS, String value) {
+      Literal literal = null;
+      if(valueNS.contains("float")) {
+        literal = model.createTypedLiteral(new Float(Float.parseFloat(value)));
+      } else if(valueNS.contains("double")) {
+        literal = model.createTypedLiteral(new Double(Double.parseDouble(value)));
+      } else if(valueNS.contains("int")) {
+        literal = model.createTypedLiteral(new Integer(Integer.parseInt(value)));
+      } else if(valueNS.contains("long")) {
+        literal = model.createTypedLiteral(new Long(Long.parseLong(value)));
+      } else if(valueNS.contains("short")) {
+        literal = model.createTypedLiteral(new Short(Short.parseShort(value)));
+      } else if(valueNS.contains("byte")) {
+        literal = model.createTypedLiteral(new Byte(Byte.parseByte(value)));
+      } else if(valueNS.contains("integer")) {
+        literal = model.createTypedLiteral(new BigInteger(value));
+      } else if(valueNS.contains("decimal")) {
+        literal = model.createTypedLiteral(new BigDecimal(value));
+      } else if(valueNS.contains("boolean")) {
+        literal = model.createTypedLiteral(new Boolean(Boolean.parseBoolean(value)));
+      } else if(valueNS.contains("string")) {
+        literal = model.createTypedLiteral(value);
+      } else {
+        literal = model.createTypedLiteral(value);
+      }
+      return literal;
     }
 }

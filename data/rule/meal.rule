@@ -7,6 +7,22 @@
                (?F rdf:type food:NonRedMeat)
                (?T meal:drinkWine ?W)
                (?W rdf:type wine:DessertWine)
+               (?T meal:winePrice ?winePrice)
+               ge(?winePrice, 6000)
                ->
                (?T rdfs:subClassOf meal:GoodMeal)
+]
+[AverageMealRule: (?T meal:eatFood ?F) 
+               (?F rdf:type food:NonRedMeat)
+               (?T meal:drinkWine ?W)
+               (?W rdf:type wine:DessertWine)
+               (?T meal:winePrice ?winePrice)
+               le(?winePrice, 6000)
+               ->
+               (?T rdfs:subClassOf meal:AverageMeal)
+]
+
+[UnknownRule: (?T meal:eatFood ?F)
+              ->
+              (?T rdfs:subClassOf meal:Unknown)
 ]
