@@ -1,7 +1,6 @@
 {
-  "input":
-  [
-    {"property":"drinkWine", "value":"http://www.w3.org/TR/2003/PR-owl-guide-20031209/wine#SelaksIceWine"},
-    {"property":"eatFood","value":"http://www.w3.org/TR/2003/PR-owl-guide-20031209/food#Pork"}
+  "args": [
+    {"property":"drinkWine", "propertyNS":"meal", "value":"SelaksIceWine", "valueNS":"wine"},
+    {"property":"eatFood", "propertyNS":"meal", "value":"Pork", "valueNS":"food"}
   ]
 }
