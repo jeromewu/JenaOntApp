@@ -25,4 +25,22 @@ For executing this program you will need 3 input files, and the command line wil
 $ java -cp <jarfile> com.delta.JenaOntApp <rdffile> <rulefile> <jsonfile>
 ```
 
-* <jarfile> : the file you compiled 
+* jarfile : the file you compiled 
+* rdffile : the ontology file in RDF/XML format
+* rulefile : the rule file for reasoner, please check [here](http://jena.apache.org/documentation/inference/#rules) for more info
+* jsonfile : the json file is the runtime data for the program, see the example below to know more, the abbr. of the namespace is defined in rule file
+
+```
+{
+  "args": [
+    {"property":"subClassOf", "propertyNS":"rdfs", "value":"Thing", "valueNS":"owl"},
+    ...
+    ]
+}
+```
+
+You can also check makefile to see how to build and execute, and there are some sample data in the directory data
+
+## Contact
+
+Please feel free to contact jeromewus@gmail.com
