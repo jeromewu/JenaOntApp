@@ -1,5 +1,5 @@
-name=swrlapp
-main=com.delta.SWRLApp
+name=jenaontapp
+main=com.delta.JenaOntApp
 jarfile=./target/${name}-1.0-SNAPSHOT-jar-with-dependencies.jar
 ontfile=./data/ont/meal.rdf
 rulefile=./data/rule/meal.rule
